@@ -1,4 +1,4 @@
-@import url('https://fonts.googleapis.com/css2?family=Fuggles&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Dancing+Script&family=Fuggles&display=swap');
 
 :root{
     --navbar: rgb(146, 43, 146);
@@ -84,12 +84,14 @@ li{
     height: 100%;
 }
 .nav__logo{
-    font-family: 'Fuggles', cursiva;
+    font-family: 'Dancing Script', cursiva;
+    font-weight: 600;
     font-size: 2rem;
     color: var(--white);
 }
 .nav__logo span{
-    font-family: 'Fuggles', cursiva;
+    font-family: 'Dancing Script', cursiva;
+    font-weight: 600;
     font-size: 4rem;
     color: var(--boutique);
 }
@@ -179,6 +181,9 @@ li{
     align-items: center;
     padding: 2rem 0;
 }
+
+/* BOTONES */
+
 .btn span{
     position: relative;
     z-index: 2;
@@ -250,7 +255,8 @@ li{
 }
 
 
-/* Carrito */
+/* CARRITO */
+
 .carrito__overlay{
     position: fixed;
     top: 0;
@@ -360,7 +366,7 @@ li{
 @media only screen and (max-width: 700px){
     .carrito{
         width: 100%;
-        height: 100%;
+        height: 80%;
         border-radius: 0rem;
     }
     .carrito__item h3{
@@ -373,7 +379,8 @@ li{
     }
 }
 
-/*Filter*/
+/*FILTRO*/
+
 .filter{
     padding: 0 2rem;
     width: 100%;
@@ -430,7 +437,8 @@ li{
     }
 }
 
-/* Detalles */
+/* DETALLES */
+
 .detalles{
     height: 100%;
     display: flex;
@@ -471,13 +479,14 @@ li{
     .detalle-grid{
         grid-template-columns: 1fr;
     }
+    .detalles-content{
+        padding: 2rem;
+        padding-top: 0rem;
+    }
 }
-#particles-js{
-    height: 100vh;
-    width: 100%;
-    position: fixed;
-    z-index: -1;
-}
+
+/* FOOTER */
+
 .footer{
     background-color: var(--navbar);
     color: var(--white);
@@ -531,6 +540,9 @@ li{
         scale: 0.7;
     }
 }
+
+/* CARRUSEL */
+
 .carousel-item{
     height: 100vh;
     min-height: 300px;
@@ -621,13 +633,12 @@ li{
 		display:inline-block !important;
 	}
 }
-@keyframes show {
-    from {
-        opacity: 0;
-        scale: 25%;
-    }
-    to {
-        opacity: 1;
-        scale: 100%;
-    }
+
+/* EFECTO DEL FONDO */
+
+#particles-js{
+    height: 100vh;
+    width: 100%;
+    position: fixed;
+    z-index: -1;
 }

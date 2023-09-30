@@ -91,20 +91,15 @@ class UI {
 				e.target.innerHTML = "En el carrito";
 				e.target.disabled = true;
 				
-
-				// GET productos al carrito
 				const carritoItem = {...Storage.getProductos(codigo), cantidad: 1}
 
-				//agregamos el producto al carrito
 				carrito = [...carrito, carritoItem]
 
-				//Guardamos el carrito al localstorage
 				Storage.saveCart(carrito)
 
-				//Set cart values
 				this.setItemValues(carrito)
 				this.addCarritoItem(carritoItem)
-				//Show al carrito
+				
 			})
 		})
 	}
@@ -286,6 +281,8 @@ function categoryValue(){
 	}
 }
 
+//CARGAR HTML ASINCRONICAMENTE
+
 document.addEventListener("DOMContentLoaded", async () => {
 
     const productosLista = new Productos();
@@ -314,6 +311,8 @@ document.addEventListener("DOMContentLoaded", async () => {
         console.error("Error al cargar productos:", error);
     }
 });
+
+//GENERAR ESTRELLAS DESDE JSON
 
 function generarEstrellas(asteriscos, puntuacionMaxima = 5) {
     const estrellaLlena = '<i class="bx bxs-star"></i>';

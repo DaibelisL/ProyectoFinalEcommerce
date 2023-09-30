@@ -28,14 +28,14 @@ class UI {
 							${generarEstrellas(producto.puntuacion)}
 						</span>
 					</div>
-						<p class="price"><b>Precio: </b> ARS ${producto.precio}</p>
+						<p class="precio"><b>Precio: </b> ARS ${producto.precio}</p>
 						<p class="description">
 							<b>Descripcion: </b> <span>${producto.detalle}</span>
 						</p>
 
 						<div class="bottom">
 							<div class="btn__group">
-								<button class="btn addToCart" data-id=${producto.codigo}>Añadir carrito</button>
+								<button class="btn addToCart" data-codigo=${producto.codigo}>Añadir carrito</button>
 								<a href="index.html" class="btn back"><span>Volver a tienda</span></a>
 							</div>
 						</div>
@@ -61,12 +61,12 @@ class UI {
 							${generarEstrellas(producto.puntuacion)}
 						</span>
 					</div>
-					<div class="price">ARS ${producto.precio}</div>
+					<div class="precio">ARS ${producto.precio}</div>
 				</div>
 				<div class="bottom">
 					<div class="btn__group">
-					<button class="btn addToCart" data-id=${producto.codigo}>Añadir carrito</button>
-					<a href="producto-detalles.html?id=${producto.codigo}" class="btn view"><span>Vista</span></a>
+					<button class="btn addToCart" data-codigo=${producto.codigo}>Añadir carrito</button>
+					<a href="producto-detalles.html?codigo=${producto.codigo}" class="btn view"><span>Vista</span></a>
 					</div>
 				</div>
 			</div>
@@ -79,8 +79,8 @@ class UI {
 		const buttons = [...document.querySelectorAll(".addToCart")];
 		buttonDOM = buttons;
 		buttons.forEach((button)=> {
-			const id = button.dataset.id;
-			const inCart = carrito.find(item => item.id === parseInt(id, 10));
+			const codigo = button.dataset.codigo;
+			const inCart = carrito.find(item => item.codigo === parseInt(codigo, 10));
 
 			if(inCart){
 				button.innerHTML = "En el carrito";
@@ -93,7 +93,7 @@ class UI {
 				
 
 				// GET productos al carrito
-				const carritoItem = {...Storage.getProductos(id), cantidad: 1}
+				const carritoItem = {...Storage.getProductos(codigo), cantidad: 1}
 
 				//agregamos el producto al carrito
 				carrito = [...carrito, carritoItem]
@@ -114,7 +114,7 @@ class UI {
 		let itemTotal = 0;
 		const spanEnCarrito = document.querySelector(".item__total");
 		carrito.map(item => {
-			tempTotal += item.price * item.cantidad;
+			tempTotal += item.precio * item.cantidad;
 			itemTotal += item.cantidad;
 		});
 		carritoTotal.innerText = parseFloat(tempTotal.toFixed(2));
@@ -127,27 +127,27 @@ class UI {
 		}
 	}
 
-	addCarritoItem({image, price, title, id}){
+	addCarritoItem({imagen, precio, descripcion, codigo}){
 		const div = document.createElement("div")
 		div.classList.add("carrito__item")
 
 		div.innerHTML = `
-		<img src=${image} alt=${title}>
+		<img src=${imagen} alt=${descripcion}>
 		<div>
-			<h3>${title}</h3>
-			<p class="price">ARS ${price}</p>
+			<h3>${descripcion}</h3>
+			<p class="precio">ARS ${precio}</p>
 		</div>
 		<div>
-			<span class="increase" data-id=${id}>
+			<span class="increase" data-codigo=${codigo}>
 				<i class="bx bxs-up-arrow"></i>
 			</span>
 			<p class="item__cantidad">1</p>
-			<span class="decrease" data-id=${id}>
+			<span class="decrease" data-codigo=${codigo}>
 				<i class="bx bxs-down-arrow"></i>
 			</span>
 		</div>
 		<div>
-			<span class="remove__item" data-id=${id}>
+			<span class="remove__item" data-codigo=${codigo}>
 				<i class="bx bx-trash"></i>
 			</span>
 		</div>
@@ -185,19 +185,19 @@ class UI {
 			console.log(targetElement)
 			if(!target) return
 			if(targetElement){
-				const id = parseInt(target.dataset.id);
-				this.removeItem(id)
+				const codigo = parseInt(target.dataset.codigo);
+				this.removeItem(codigo)
 				carritoCenter.removeChild(target.parentElement.parentElement)
 			}else if(target.classList.contains("increase")){
-				const id = parseInt(target.dataset.id, 10);
-				let tempItem = carrito.find(item => item.id === id);
+				const codigo = parseInt(target.dataset.codigo, 10);
+				let tempItem = carrito.find(item => item.codigo === codigo);
 				tempItem.cantidad++;
 				Storage.saveCart(carrito)
 				this.setItemValues(carrito)
 				target.nextElementSibling.innerText = tempItem.cantidad
 			}else if(target.classList.contains("decrease")){
-				const id = parseInt(target.dataset.id, 10);
-				let tempItem = carrito.find(item => item.id === id);
+				const codigo = parseInt(target.dataset.codigo, 10);
+				let tempItem = carrito.find(item => item.codigo === codigo);
 				tempItem.cantidad--;
 
 				if(tempItem.cantidad > 0){
@@ -205,32 +205,32 @@ class UI {
 					this.setItemValues(carrito);
 					target.previousElementSibling.innerText = tempItem.cantidad;
 				}else{
-					this.removeItem(id);
+					this.removeItem(codigo);
 					carritoCenter.removeChild(target.parentElement.parentElement)
 				}
 			}
 		});
 	}
 	clearCarrito(){
-		const cartItems = carrito.map(item => item.id)
-		cartItems.forEach(id => this.removeItem(id))
+		const cartItems = carrito.map(item => item.codigo)
+		cartItems.forEach(codigo => this.removeItem(codigo))
 
 		while(carritoCenter.children.length > 0){
 			carritoCenter.removeChild(carritoCenter.children[0])
 		}
 	}
-	removeItem(id){
-		carrito = carrito.filter(item => item.id !== id);
+	removeItem(codigo){
+		carrito = carrito.filter(item => item.codigo !== codigo);
 		this.setItemValues(carrito)
 		Storage.saveCart(carrito)
-		let button = this.singleButton(id);
+		let button = this.singleButton(codigo);
 		if(button){
 			button.disabled = false;
 			button.innerText = "Añadir carrito"
 		}
 	}
-	singleButton(id){
-		return buttonDOM.find(button => parseInt(button.dataset.id) === id)
+	singleButton(codigo){
+		return buttonDOM.find(button => parseInt(button.dataset.codigo) === codigo)
 	}
 }
 
@@ -241,9 +241,9 @@ class Storage {
 	static saveCart(carrito){
 		localStorage.setItem("carrito", JSON.stringify(carrito))
 	}
-	static getProductos(id){
+	static getProductos(codigo){
 		const producto = JSON.parse(localStorage.getItem("productos"))
-		return producto.find(product =>product.id === parseFloat(id, 10))
+		return producto.find(product =>product.codigo === parseFloat(codigo, 10))
 	}
 	static getCart(){
 		return localStorage.getItem("carrito") ? JSON.parse(localStorage.getItem("carrito")) : [];
@@ -297,10 +297,10 @@ document.addEventListener("DOMContentLoaded", async () => {
         productos = await productosLista.getProductos();
 
         const query = new URLSearchParams(window.location.search);
-        const id = query.get('id');
+        const codigo = query.get('codigo');
 
-        if (id) {
-            ui.detalleProducto(id);
+        if (codigo) {
+            ui.detalleProducto(codigo);
             Storage.saveProduct(productos);
             ui.getButtons();
             ui.cartLogic();
